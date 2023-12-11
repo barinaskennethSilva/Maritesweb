@@ -1,20 +1,34 @@
 <template>
-
-<header_pages v-if="!$route.meta.hideNavbar"/>
-<div class="app">
-  <router-view/>
+<h1>This test for insert data i firestore only thank you</h1>
+<div v-for="task in tasks" :key="task.id">
+  <div>
+   Name: {{ task.name }}
+  </div>
+    <div>
+   Name: {{ task.description }}
+  </div>
 </div>
-
 </template>
-<script>
-import header_pages from './views/header.vue'
-  export default {
-    components:{
-header_pages,
-    },
-   
+<script >
+import { db } from '@/main.js';
+import { getDocs, collection } from 'firebase/firestore';
+import { onMounted, ref } from 'vue';
 
-  }
+
+const tasks = ref([])
+onMounted(async() =>{
+let tasksCollection = await getDocs(collection(db, 'tasks'))
+tasksCollection.forEach((task) => {
+tasks.value.push(...task.data(), task.id())
+})
+}) 
+function toggleComponent(data = {}, isNew = true){
+  show.value = !show.value
+}
+ 
+ 
+  
+  
 </script>
 <style>
 #app {
